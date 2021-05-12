@@ -1,0 +1,23 @@
+agregar cdn bootstrap al index.html
+crea el archivo navbar.vue 
+    <template>
+        <div>
+            <h1>Barra de navegacion</h1>
+        </div>    
+    </template>
+
+    <script>
+    export default {
+        name: 'Nabvar'
+    }
+    </script>
+
+    <style lang="">
+        
+    </style>
+
+agregarlo a App.vue
+lo importamos dentro de el script con cualquier nombre >>([ asi ]) >>
+    import Nabvarxname from './components/Nabvar.vue'
+lo colocamos en components con su nombre de importacion
+

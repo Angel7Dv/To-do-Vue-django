@@ -1,0 +1,222 @@
+instalaciones 
+Django: 
+    django
+    djangorestframework ==  'rest_framework'
+    django-cors-headers  ==  'cors_headers'
+
+
+Vue:
+    npm install axios
+
+
+crea el entorn virtual
+instalar django
+crear el proyecto 
+crear la app 
+registrar la app
+agregar los models 
+hacer las migraciones
+agregar objetos a los models
+
+crear la api
+    pip install djangorestframework
+    registrarla en sttings app
+        INSTALLED_APPS = [..., 'rest_framework'
+
+crear serializer.py
+    from rest_framework import serializers
+    from .models import libros
+
+    class serializLibros(serializers.ModelSerializer):
+
+        class Meta():
+            model = libros
+            fields = '__all__'
+
+crear archivo viewsets.py      ===>> ayuda a la creacion de CRUD sobre el objeto
+    
+    from rest_framework import viewsets
+
+    from .models import libros
+    from .serializer import serializLibros
+
+
+    class libroviewsets(viewsets.ModelViewSet):
+        queryset = libros.objects.all()
+        serializer_class = serializLibros
+
+crea el archivo urls.py
+
+    from rest_framework import routers
+    from .viewsets import libroviewsets
+
+    router = routers.SimpleRouter()
+    router.register('variable_urls', libroviewsets)
+
+    urlpatterns = router.urls
+
+registar urls de la app en urls principal
+
+instalar vue dentro de el env/projecto con el env activado  
+instalar  bootstrap y agregarlo al main.js
+
+crear una carpeta dentro de components y agregar el componente
+crear una lista iterable en componentes y convertirla en tabla
+
+    <template>
+        <b-container>
+            <b-row> 
+                <b-col class="text-left"> 
+                    <h2>listado de libros</h2>
+                </b-col>
+                <b-col md="12"> 
+                    <b-table striped hover :items="libros" :fields="fields"> striped hover
+                    </b-table>
+
+                </b-col>
+            </b-row>
+        </b-container>
+    </template>
+
+    <script>
+    export default {
+        name: 'ListaLibros',
+        data(){
+            return {
+                libros: [],
+                fields: [
+                    {key: 'titulo', label: 'TITULO'},
+                    {key: 'descripcion', label: 'DESCRIPCION'},
+                    {key: 'action', label: 'ACCION'}
+                ]
+            }
+        }
+    }
+    </script>
+
+agrega el componente a rutas y linkealo
+
+
+instalar libreria axios
+    npm install axios
+
+importar axios en el componente y crear el pedido de api en vue
+
+import axios from 'axios'
+...
+..
+..
+    methods: {
+        getAPI(){
+            const ruta = 'http://127.0.0.1:8000/api/v1.0/libros/'
+            axios.get(ruta).then((response) => {
+                this.libros = response.data
+            })
+            .catch((error)=>{
+                console.log('hay un error')
+            })
+        }
+    },
+    created() {
+        this.getAPI()
+    },
+
+
+se instala la libreria  
+pip install django-cors-headers
+registar cors-headers en sttings.py       https://pypi.org/project/django-cors-headers/
+
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOWED_ORIGINS = [    
+        "http://localhost:8080",
+        
+    ]
+
+    INSTALLED_APPS = [
+        'rest_framework',
+        'corsheaders'
+    ]
+
+    MIDDLEWARE = [
+        'corsheaders.middleware.CorsMiddleware',
+    ]
+
+ahora corremos los servidores primero django luego vue
+
+
+agregar botones
+
+         <b-table striped hover :items="libros" :fields="fields"> striped hover
+
+                    <!-- botones -->
+                    <template v-slot:cell(action)="data">    
+                        <b-button size="sm" variant="primary">Editar</b-button>      
+                        <b-button size="sm" variant="danger">Eliminar</b-button>
+                    </template>
+
+
+componente de edicion
+
+        <b-row>
+            <b-col>   
+                <b-card bg-variant="light">
+                    <form @onSumit="onSumit">
+                    
+                    <!-- input -->
+                       titulo :  
+                    <b-form-input v-model.trim="form.titulo" ></b-form-input>
+                       descripcion: 
+                    <b-textarea rows="3" v-model.trim="form.descripcion"></b-textarea>
+
+                    <!-- acciones -->
+                    <b-button type="submit" variant="primary" >Guardar</b-button>    
+                    <b-button type="submit" variant="secondary" :to="{name: 'ListaLibros'}">Cancelar</b-button>    
+
+                    </form>
+                </b-card>
+            </b-col> 
+        </b-row>   
+
+export default {
+    data() {
+        return {
+            form: {
+                titulo: 'sadsad',
+                descripcion: ''
+            } 
+        }
+    },
+    methods: {
+        onSumit(evt){
+            evt.preventDefault()
+        }
+    },
+
+
+obtener la id de objeto actual
+
+    import axios from 'axios'
+
+    data() {
+        return {
+            id: this.$router.params.id,
+
+
+    methods: {
+        onSumit(evt){
+            evt.preventDefault()
+        },
+        getid(){
+        const ruta = 'http://127.0.0.1:8000/api/v1.0/libros/${this.id}'
+        axios.get(ruta).then((response) => {
+            this.form.titulo = response.data.titulo
+            this.form.descripcion = response.data.descripcion
+    
+        })
+        .catch((error)=>{
+            console.log('hay un error')
+        })
+        
+        }
+
+
